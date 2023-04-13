@@ -1,0 +1,81 @@
+body {
+	font-family: Arial, sans-serif;
+	text-align: center;
+  }
+  
+  #app {
+	width: 100%;
+	max-width: 500px;
+	margin: 0 auto;
+  }
+  
+  #settings input {
+	width: 100%;
+	max-width: 150px;
+	margin: 10px;
+	padding: 5px;
+  }
+  
+  button {
+	background-color: #4CAF50;
+	color: white;
+	font-size: 16px;
+	padding: 10px 20px;
+	margin: 10px;
+	border: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	border-radius: 4px;
+  }
+  
+  button:hover {
+	background-color: #45a049;
+  }
+  
+  #timerSetsContainer {
+	text-align: center;
+  }
+  
+  #timerSetsContainer input {
+	width: 100%;
+	max-width: 150px;
+	margin: 5px;
+	padding: 5px;
+  }
+  
+  #breathingDisplay {
+	position: relative;
+  }
+  
+  #circle {
+	border: 5px solid #4CAF50;
+	border-radius: 50%;
+	width: 200px;
+	height: 200px;
+	margin: 30px auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+  
+  #timerDisplay {
+	font-size: 36px;
+	font-weight: bold;
+  }
+  
+  #phaseDisplay {
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 30px;
+  }
+  
+  #roundsLeft {
+	position: absolute;
+	top: -10px;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 16px;
+	font-weight: bold;
+  }

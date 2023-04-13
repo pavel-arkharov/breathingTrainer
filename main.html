@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Guided Breathing Practice</title>
+</head>
+<body>
+  <div id="settings">
+    <h2>Settings</h2>
+    <label for="inhale">Inhale (seconds):</label>
+    <input type="number" id="inhale" min="1" value="4">
+    <br>
+    <label for="hold">Hold (seconds):</label>
+    <input type="number" id="hold" min="1" value="4">
+    <br>
+    <label for="exhale">Exhale (seconds):</label>
+    <input type="number" id="exhale" min="1" value="4">
+    <br>
+    <label for="rounds">Rounds:</label>
+    <input type="number" id="rounds" min="1" value="1">
+    <br>
+    <button id="add-timer-set">Add Timer Set</button>
+    <div id="timer-sets"></div>
+    <br>
+    <button id="start-btn">START</button>
+  </div>
+  <div id="breathing">
+    <div id="rounds-left-display"></div>
+    <div id="circle">
+      <div id="timer-display">4</div>
+    </div>
+    <div id="phase-display"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
