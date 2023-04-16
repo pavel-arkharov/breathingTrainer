@@ -20,23 +20,16 @@ let currentRound = 1;
 const timerSetsData = [];
 
 startBtn.addEventListener("click", () => {
-  inhaleTime = parseInt(inhaleInput.value) * 1000;
-  holdTime = parseInt(holdInput.value) * 1000;
-  exhaleTime = parseInt(exhaleInput.value) * 1000;
-  rounds = parseInt(roundsInput.value);
-
-  settings.style.display = "none";
-  roundsLeftDisplay.style.display = "block";
-
-  //timerSetsData = [{ inhaleTime, holdTime, exhaleTime }, ...timerSetsData];
-  timerSetsData.forEach((set) => {
-    set.inhaleTime = parseInt(set.inhale.value) * 1000;
-    set.holdTime = parseInt(set.hold.value) * 1000;
-    set.exhaleTime = parseInt(set.exhale.value) * 1000;
+	inhaleTime = parseInt(inhaleInput.value) * 1000;
+	holdTime = parseInt(holdInput.value) * 1000;
+	exhaleTime = parseInt(exhaleInput.value) * 1000;
+	rounds = parseInt(roundsInput.value);
+  
+	settings.style.display = "none";
+	roundsLeftDisplay.style.display = "block";
+  
+	performBreathing();
   });
-
-  performBreathing();
-});
 
 function updateTimerDisplay(time) {
   timerDisplay.textContent = time;
@@ -50,27 +43,7 @@ function updateRoundsLeftDisplay(roundsLeft) {
   roundsLeftDisplay.textContent = `Rounds left: ${roundsLeft}`;
 }
 
-function performBreathing() {
-	if (currentRound > rounds) {
-		resetPage();
-		return;
-	  }
-	
-	  updateRoundsLeftDisplay(rounds - currentRound + 1);
-	
-	  let currentTimerSetIndex;
-	  if (currentRound === 1) {
-		currentTimerSetIndex = -1; // Use the original timers for the first round
-	  } else {
-		currentTimerSetIndex = (currentRound - 2) % timerSetsData.length;
-	  }
-	
-	  const currentTimerSet = timerSetsData[currentTimerSetIndex] || {};
-	  const currentInhaleTime = currentTimerSet.inhaleTime || inhaleTime;
-	  const currentHoldTime = currentTimerSet.holdTime || holdTime;
-	  const currentExhaleTime = currentTimerSet.exhaleTime || exhaleTime;
-
-  const updateTimer = (phaseTime, phaseName, nextPhase) => {
+function updateTimer (phaseTime, phaseName, nextPhase) {
     let remainingTime = phaseTime;
     updateTimerDisplay(remainingTime / 1000);
     updatePhaseDisplay(phaseName);
@@ -86,33 +59,67 @@ function performBreathing() {
     }, 1000);
   };
 
-  // Inhale
-  updateTimer(currentInhaleTime, "INHALE", () => {
-    // Hold
-    setTimeout(() => {
-      updateTimer(currentHoldTime, "HOLD", () => {
-        // Exhale
-        setTimeout(() => {
-          updateTimer(currentExhaleTime, "EXHALE", () => {
-            // Hold again
-            setTimeout(() => {
-              updateTimer(currentHoldTime, "HOLD", () => {
-                // Proceed to the next round
-                setTimeout(() => {
-					if (currentTimerSetIndex === timerSetsData.length - 1) {
-						// Increment the round only after completing the last timer set in the sequence
-						currentRound++;
-					  }
-                  performBreathing();
-                },(currentInhaleTime + currentHoldTime + currentExhaleTime + currentHoldTime) * 1000);
-              });
-            }, 1000);
-          });
-        }, 1000);
-      });
-	}, 1000);
-});
-}
+  function performBreathing() {
+	if (currentRound > rounds) {
+	  resetPage();
+	  return;
+	}
+  
+	updateRoundsLeftDisplay(rounds - currentRound + 1);
+  
+	let currentTimerSetIndex;
+	if (currentRound === 1) {
+	  currentTimerSetIndex = -1; // Use the original timers for the first round
+	} else {
+	  currentTimerSetIndex = (currentRound - 2) % timerSetsData.length;
+	}
+  
+	const currentTimerSet = timerSetsData[currentTimerSetIndex] || {};
+	const currentInhaleTime = currentTimerSet.inhaleTime || inhaleTime;
+	const currentHoldTime = currentTimerSet.holdTime || holdTime;
+	const currentExhaleTime = currentTimerSet.exhaleTime || exhaleTime;
+  
+	const timerSequence = [
+	  { duration: currentInhaleTime, name: "INHALE" },
+	  { duration: currentHoldTime, name: "HOLD" },
+	  { duration: currentExhaleTime, name: "EXHALE" },
+	  { duration: currentHoldTime, name: "HOLD" },
+	];
+  
+	timerSetsData.forEach((set) => {
+	  set.inhaleTime = parseInt(set.inhale.value) * 1000;
+	  set.holdTime = parseInt(set.hold.value) * 1000;
+	  set.exhaleTime = parseInt(set.exhale.value) * 1000;
+  
+	  timerSequence.push(
+		{ duration: set.inhaleTime, name: "INHALE" },
+		{ duration: set.holdTime, name: "HOLD" },
+		{ duration: set.exhaleTime, name: "EXHALE" },
+		{ duration: set.holdTime, name: "HOLD" }
+	  );
+	});
+  
+	let timerIndex = 0;
+  
+	function nextTimer() {
+	  if (timerIndex < timerSequence.length) {
+		const timer = timerSequence[timerIndex];
+		updateTimer(timer.duration, timer.name, () => {
+		  	timerIndex++;
+			// Wait for 1 second before moving to the next timer
+			setTimeout(() => {
+			nextTimer();
+			}, 1000);
+		});
+	  } else {
+		currentRound++;
+		performBreathing();
+	  }
+	}
+  
+	nextTimer();
+  }
+  
 
 function resetPage() {
 	settings.style.display = "block";
