@@ -67,23 +67,11 @@ function updateTimer (phaseTime, phaseName, nextPhase) {
   
 	updateRoundsLeftDisplay(rounds - currentRound + 1);
   
-	let currentTimerSetIndex;
-	if (currentRound === 1) {
-	  currentTimerSetIndex = -1; // Use the original timers for the first round
-	} else {
-	  currentTimerSetIndex = (currentRound - 2) % timerSetsData.length;
-	}
-  
-	const currentTimerSet = timerSetsData[currentTimerSetIndex] || {};
-	const currentInhaleTime = currentTimerSet.inhaleTime || inhaleTime;
-	const currentHoldTime = currentTimerSet.holdTime || holdTime;
-	const currentExhaleTime = currentTimerSet.exhaleTime || exhaleTime;
-  
 	const timerSequence = [
-	  { duration: currentInhaleTime, name: "INHALE" },
-	  { duration: currentHoldTime, name: "HOLD" },
-	  { duration: currentExhaleTime, name: "EXHALE" },
-	  { duration: currentHoldTime, name: "HOLD" },
+		{ duration: inhaleTime, name: "INHALE" },
+		{ duration: holdTime, name: "HOLD" },
+		{ duration: exhaleTime, name: "EXHALE" },
+		{ duration: holdTime, name: "HOLD" },
 	];
   
 	timerSetsData.forEach((set) => {
@@ -133,26 +121,35 @@ function resetPage() {
 	const timerSet = document.createElement("div");
 	timerSet.classList.add("timer-set");
   
+	const inhaleLabel = document.createElement("label");
+	inhaleLabel.textContent = "Inhale: ";
 	const inhaleInput = document.createElement("input");
 	inhaleInput.type = "number";
 	inhaleInput.min = "1";
 	inhaleInput.value = "4";
 	inhaleInput.classList.add("timer-input");
   
+	const holdLabel = document.createElement("label");
+	holdLabel.textContent = "Hold: ";
 	const holdInput = document.createElement("input");
 	holdInput.type = "number";
 	holdInput.min = "1";
 	holdInput.value = "4";
 	holdInput.classList.add("timer-input");
   
+	const exhaleLabel = document.createElement("label");
+	exhaleLabel.textContent = "Exhale: ";
 	const exhaleInput = document.createElement("input");
 	exhaleInput.type = "number";
 	exhaleInput.min = "1";
 	exhaleInput.value = "4";
 	exhaleInput.classList.add("timer-input");
   
+	timerSet.appendChild(inhaleLabel);
 	timerSet.appendChild(inhaleInput);
+	timerSet.appendChild(holdLabel);
 	timerSet.appendChild(holdInput);
+	timerSet.appendChild(exhaleLabel);
 	timerSet.appendChild(exhaleInput);
   
 	timerSets.appendChild(timerSet);
@@ -160,7 +157,7 @@ function resetPage() {
 	timerSetsData.push({
 	  inhale: inhaleInput,
 	  hold: holdInput,
-	  exhale: exhaleInput
+	  exhale: exhaleInput,
 	});
   });
 
